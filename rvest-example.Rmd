@@ -1,0 +1,59 @@
+---
+title: "Scraping the MEDS website"
+author: "Allison Horst"
+date: '2022-04-19'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(rvest)
+library(tidyverse)
+```
+
+```{r}
+url <- "https://ucsb-meds.github.io/overview.html"
+```
+
+## Use `read_html` to access the html from a URL: 
+
+```{r}
+html <- read_html(url)
+```
+
+## Use `html_elements` to look for tags: 
+
+```{r}
+paragraphs <- html %>% html_elements("p")
+paragraphs
+
+paragraphs_vector <- paragraphs %>% 
+  html_text()
+paragraphs_vector
+
+titles <- html %>% html_elements("title")
+titles
+
+h2_headers <- html %>% html_elements("h2")
+h2_headers
+
+# What you might actually want: 
+h2_headers %>% html_text()
+```
+
+## What about the table in usable form? 
+```{r}
+table_ew <- html %>% html_elements("table")
+
+# Better...
+table <- html_table(html)
+table
+
+# Notice that there are two tables! 
+table[[1]]
+
+table[[2]]
+```
+
+
+
